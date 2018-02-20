@@ -1,0 +1,189 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<conio.h>
+
+struct node
+{
+    int serial;
+    int age;
+    char name[100];
+    char father[100];
+    char mother[100];
+    char address[100];
+    char password[100];
+    char mobile[100];
+
+
+    struct node *prev;
+    struct node *next;
+};
+
+struct node add;
+struct node check;
+struct node *head,*tail,*a,*b,*c,*d,*e,*f,*p,*q,*temp;
+
+int k,choice,i,j;
+i=0;
+k=0;
+
+char pass;
+char username[100];
+char password[100];
+
+char check_username[100];
+char check_password[100];
+char check_nickname[100];
+
+void create_user()
+{
+
+    a=(struct node*)malloc(sizeof(struct node));
+    b=(struct node*)malloc(sizeof(struct node));
+
+    head=a;
+    a->serial=1001;
+    strcpy(a->name,"Ovishak");
+    strcpy(a->father,"Father");
+    strcpy(a->mother,"Mother");
+    a->age=22;
+    strcpy(a->address,"Mirpur");
+    strcpy(a->mobile,"01952373457");
+    strcpy(a->password,"Ovishak");
+    a->next=b;
+    b->serial=1002;
+    strcpy(b->name,"Ovi");
+    strcpy(b->father,"Father1");
+    strcpy(b->mother,"Mother1");
+    b->age=22;
+    strcpy(b->address,"Mirpur1");
+    strcpy(b->mobile,"01952373457");
+    strcpy(b->password,"Ovi");
+    b->next=NULL;
+
+    tail=b;
+    file_display_user();
+
+}
+
+void file_display_user()
+{
+
+    FILE *fdu;
+    fdu=fopen("user_list.txt","w");
+
+    for(p=head; p!=NULL; p=p->next)
+    {
+        fprintf(fdu,"%d %s %s %s %d %s %s %s\n",p->serial,p->name,p->father,p->mother,p->age,p->address,p->mobile,p->password);
+    }
+    fclose(fdu);
+}
+void user_list_view()
+{
+    printf("\n\t\tWELCOME TO TOM & JERRY BANK Ltd.\n");
+    linked_list_user();
+    p=head;
+
+    while(p!=NULL)
+    {
+        printf("\nSerial Number : %d\n Name : %s\nPassword : %s\nFather's Name :%s\Mother's Name : %s\nAge : %d\nAddress : %s\nMobile Number :%s \n ",p->serial,p->name,p->password,p->father,p->mother,p->age,p->address,p->mobile);
+        p=p->next;
+    }
+}
+void new_account_user( struct node *p)
+{
+
+    printf("\n\t\tWELCOME TO TOM & JERRY BANK Ltd.\n");
+    temp=(struct node *)malloc(sizeof(struct node));
+    head=temp;
+
+     printf("Enter Account Serial Number :\n");
+     scanf("%d",&temp->serial);
+
+     printf("Enter Name :(Use Underscore(_)When You need space)\n");
+     scanf("%s",&temp->name);
+
+     printf("Enter Password :\n");
+     scanf("%s",&temp->password);
+
+     printf("Enter Father's Name :(Use Underscore(_)When You need space)\n");
+     scanf("%s",&temp->father);
+
+     printf("Enter Mother's Name :(Use Underscore(_)When You need space)\n");
+     scanf("%s",&temp->mother);
+
+     printf("Enter Age :\n");
+     scanf("%d",&temp->age);
+
+     printf("Enter Address :(Use Underscore(_)When You need space)\n");
+     scanf("%s",&temp->address);
+
+     printf("Enter Mobile Number :\n");
+     scanf("%s",&temp->mobile);
+    temp->next=NULL;
+
+    printf("\t\tyour account has been created\n");
+    display_new_create_account_user(temp);
+
+}
+void display_new_create_account_user(struct node *p)
+{
+    FILE *NCU;
+    NCU=fopen("user_list.txt","a+");
+    for(p=p; p!=NULL; p=p->next)
+    {
+        fprintf(NCU,"%d %s %s %s %d %s %s %s\n",p->serial,p->name,p->father,p->mother,p->age,p->address,p->mobile,p->password);
+    }
+
+    fclose(NCU);
+}
+
+void main()
+{
+    int a;
+    printf("1.Create\n\n2.View\n");
+    scanf("%d",&a);
+    if(a==1)
+    {   system("cls");
+        new_account_user(tail);
+    }
+    if(a==2)
+    {   system("cls");
+        user_list_view();
+    }
+}
+
+void linked_list_user()
+{
+    head=(struct node *)malloc(sizeof(struct node));
+    tail = head;
+    FILE *llu;
+    llu=fopen("user_list.txt","r");
+    int i;
+    i= 1;
+    while(1)
+    {
+        if( feof(llu) )
+        {
+            break ;
+        }
+        temp=(struct node *)malloc(sizeof(struct node));
+
+        fscanf(llu,"%d %s %s %s %d %s %s %s\n",&temp->serial,&temp->name,&temp->father,&temp->mother,&temp->age,&temp->address,&temp->mobile,&temp->password);
+
+
+        temp->next=NULL;
+        temp->prev=tail;
+        tail->next=temp;
+        tail=temp;
+        if(i ==1)
+        {
+            head=temp;
+        }
+
+
+        i++;
+    }
+
+    fclose(llu);
+}
